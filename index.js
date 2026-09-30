@@ -130,11 +130,20 @@ app.get('/api/users/:_id/logs', async (req, res) => {
       log
     });
   } catch (e) {
-    res.json({ error: 'could not fetch log' });
+  console.error(e);
+  res.json({ error: e.message });
   }
 });
 
 const port = process.env.PORT || 3000;
+
+app.get('/api/status', (req, res) => {
+  res.json({
+    hasUri: !!process.env.MONGO_URI,
+    dbState: mongoose.connection.readyState
+  });
+});
+
 app.listen(port, () => {
   console.log('Listening on port ' + port);
 });
